@@ -14,5 +14,5 @@ Include the class in your application and replace
 ```php
    $col=array('name','address');
    $value=array('prasad','MH');
-   if($d-put_('table',$col,$value);
+   if($d-put_('table',$col,$value)) echo "Done!";
 ```

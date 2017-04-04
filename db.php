@@ -61,18 +61,21 @@ class DB{
 			else{ $this->error=mysqli_error($this->conn); $this->db_disconnect(); return false;}
 		}	
 	}
-	/*
-	Yet to finish multiple record return
-	*/
+	function ToArray($result) {
+	    $rows = array();
+	    while($row = $result->fetch_assoc()) {
+	        $rows[] = $row;
+	    }
+	    return $rows;
+	}
 	function get_($table,$get,$column,$value){
 		if($this->db_connect()){
 			if($column!=''&&$value!=''){
 				$sql="select $get from $table where $column=$value;";
 				$result=$this->conn->query($sql);
 				if(!mysqli_errno($this->conn)){
-					$result=mysqli_fetch_array($result);
-					
-					$this->db_disconnect(); return $result[$get];
+					$result=$this->resultToArray($result);
+					$this->db_disconnect(); return $result;
 				}
 				else{ $this->error=mysqli_error($this->conn); echo $this->error; $this->db_disconnect(); return false;}
 			}
@@ -80,7 +83,7 @@ class DB{
 				$sql="select $get from $table";
 				$result=$this->conn->query($sql);
 				if(!mysqli_errno($this->conn)){
-					$result=mysqli_fetch_array($result,MYSQLI_ASSOC);
+					$result=$this->ToArray($result);
 					$this->db_disconnect(); return $result;
 				}
 				else{ $this->error=mysqli_error($this->conn); $this->db_disconnect(); return false;}
